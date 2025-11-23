@@ -1,0 +1,38 @@
+server:
+  port: 8765
+spring:
+  application:
+    name: hls-gateway
+    #  server:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: aircraft-service
+          uri: lb://aircraft-service
+          predicates:
+            - Path=/aircraft-service/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user-service/**
+        - id: deal-service
+          uri: lb://deal-service
+          predicates:
+            - Path=/deal-service/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: aircraft-service
+        url: /aircraft-service/api-docs
+      - name: user-service
+        url: /user-service/api-docs
+      - name: deal-service
+        url: /deal-service/api-docs
+  api-docs:
+    enabled: true
