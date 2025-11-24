@@ -15,14 +15,60 @@ spring:
           uri: lb://aircraft-service
           predicates:
             - Path=/aircraft-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: aircraftServiceCB
+                fallbackUri: forward:/fallback/aircraft
         - id: user-service
           uri: lb://user-service
           predicates:
             - Path=/user-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: userServiceCB
+                fallbackUri: forward:/fallback/user
         - id: deal-service
           uri: lb://deal-service
           predicates:
             - Path=/deal-service/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: dealServiceCB
+                fallbackUri: forward:/fallback/deal
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 5
+        minimumNumberOfCalls: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+    instances:
+      aircraftServiceCB:
+        baseConfig: default
+      userServiceCB:
+        baseConfig: default
+      dealServiceCB:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 3s
+        cancelRunningFuture: true
+    instances:
+      aircraftServiceCB:
+        baseConfig: default
+      userServiceCB:
+        baseConfig: default
+      dealServiceCB:
+        baseConfig: default
 
 springdoc:
   swagger-ui:
