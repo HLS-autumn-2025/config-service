@@ -73,10 +73,14 @@ resilience4j:
         permittedNumberOfCallsInHalfOpenState: 5
         minimumNumberOfCalls: 10
         automaticTransitionFromOpenToHalfOpenEnabled: true
+        ignoreExceptions:
+          - org.hls.hls_gateway.config.FeignClientException
     instances:
       aircraftServiceCB:
         baseConfig: default
       userServiceCB:
+        baseConfig: default
+      userService:
         baseConfig: default
       dealServiceCB:
         baseConfig: default
