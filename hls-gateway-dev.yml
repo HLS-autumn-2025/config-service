@@ -4,6 +4,8 @@ spring:
   application:
     name: hls-gateway
     #  server:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
   cloud:
     gateway:
       discovery:

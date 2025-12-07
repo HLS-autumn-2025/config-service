@@ -24,3 +24,6 @@ spring:
     user: ${DB_USERNAME:user_user}
     password: ${DB_PASSWORD:user_pass}
 
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+

@@ -24,3 +24,23 @@ spring:
     web:
       pageable:
         max-page-size: ${MAX_PAGE_SIZE:50}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        ignoreExceptions:
+          - ru.hls.deal_service.config.FeignClientException
+    instances:
+      userService:
+        baseConfig: default
+      aircraftService:
+        baseConfig: default
